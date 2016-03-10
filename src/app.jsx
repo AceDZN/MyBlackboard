@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var AceLogo = require('./components/ace-logo');
 
 var App = React.createClass({
   getInitialState: function(){
@@ -12,9 +13,11 @@ var App = React.createClass({
     return (
       <div>
         <div className="blackboard_wrap">
-          BLACKBOARD CONTENT WILL BE HERE
+          <div className="blackboard_bg">
+            BLACKBOARD CONTENT WILL BE HERE
+          </div>
         </div>
-
+        <AceLogo />
       </div>
 
     );
