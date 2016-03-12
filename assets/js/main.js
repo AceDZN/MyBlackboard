@@ -4,6 +4,7 @@ var ReactDOM = require('react-dom');
 var WeatherWidget = require('./components/weather/weather-widget');
 var ClockWidget = require('./components/clock/clock-widget');
 var ToDoWidget = require('./components/todo/todo-widget');
+var GoogleLogin = require('./components/social-login/google');
 var AceLogo = require('./components/ace-logo');
 
 var App = React.createClass({displayName: "App",
@@ -31,7 +32,8 @@ var App = React.createClass({displayName: "App",
               )
             ), 
             React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}
+              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}, 
+                React.createElement(GoogleLogin, null)
               ), 
               React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}, 
                 React.createElement(ToDoWidget, null)
@@ -49,7 +51,7 @@ var element = React.createElement(App, {});
 ReactDOM.render(element, document.querySelector('.main_wrap'));
 
 
-},{"./components/ace-logo":207,"./components/clock/clock-widget":208,"./components/todo/todo-widget":213,"./components/weather/weather-widget":217,"react":173,"react-dom":32}],2:[function(require,module,exports){
+},{"./components/ace-logo":207,"./components/clock/clock-widget":208,"./components/social-login/google":209,"./components/todo/todo-widget":214,"./components/weather/weather-widget":218,"react":173,"react-dom":32}],2:[function(require,module,exports){
 'use strict';
 
 //
@@ -25603,6 +25605,26 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":173}],209:[function(require,module,exports){
 var React = require('react');
+var UserStore = require('../../stores/user-store');
+
+
+module.exports = React.createClass({displayName: "exports",
+  render: function(){
+    return (
+      React.createElement("div", null, 
+        React.createElement("h1", {onClick: UserStore.login}, "Login with Google")
+      )
+    )
+  },
+
+
+
+
+});
+
+
+},{"../../stores/user-store":219,"react":173}],210:[function(require,module,exports){
+var React = require('react');
 module.exports = React.createClass({displayName: "exports",
   render: function(){
     return React.createElement("div", null, 
@@ -25641,7 +25663,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"react":173}],210:[function(require,module,exports){
+},{"react":173}],211:[function(require,module,exports){
 var React = require('react');
 var ReactSVGMorph = require('react-svg-morph');
 var MorphReplace = ReactSVGMorph.MorphReplace;
@@ -25729,7 +25751,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"react":173,"react-svg-morph":38}],211:[function(require,module,exports){
+},{"react":173,"react-svg-morph":38}],212:[function(require,module,exports){
 var React = require('react');
 var Firebase = require('firebase');
 var rootUrl = "https://blinding-torch-6580.firebaseio.com/";
@@ -25824,13 +25846,13 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./icon":210,"firebase":30,"react":173}],212:[function(require,module,exports){
+},{"./icon":211,"firebase":30,"react":173}],213:[function(require,module,exports){
 var React = require('react');
 var ListItem = require('./list-item');
 
 module.exports = React.createClass({displayName: "exports",
   render: function(){
-    return React.createElement("div", null, 
+    return React.createElement("div", {className: "list frame"}, 
       this.renderList()
     )
   },
@@ -25857,7 +25879,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./list-item":211,"react":173}],213:[function(require,module,exports){
+},{"./list-item":212,"react":173}],214:[function(require,module,exports){
 var React = require('react');
 var ReactFire = require('reactfire');
 var Firebase = require('firebase');
@@ -25924,7 +25946,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./partials/header":209,"./partials/list":212,"firebase":30,"react":173,"reactfire":174}],214:[function(require,module,exports){
+},{"./partials/header":210,"./partials/list":213,"firebase":30,"react":173,"reactfire":174}],215:[function(require,module,exports){
 var React = require('react');
 
 var WeatherStore = require('../weather-store');
@@ -26012,7 +26034,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"../weather-store":216,"react":173}],215:[function(require,module,exports){
+},{"../weather-store":217,"react":173}],216:[function(require,module,exports){
 var React = require('react');
 var ReactSVGMorph = require('react-svg-morph');
 var MorphReplace = ReactSVGMorph.MorphReplace;
@@ -26308,7 +26330,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"react":173,"react-svg-morph":38}],216:[function(require,module,exports){
+},{"react":173,"react-svg-morph":38}],217:[function(require,module,exports){
 var Reflux = require('reflux');
 var superagent = require('superagent');
 var jsonp = require('superagent-jsonp');
@@ -26349,7 +26371,7 @@ module.exports = Reflux.createStore({
 });
 
 
-},{"reflux":191,"superagent":195,"superagent-jsonp":194}],217:[function(require,module,exports){
+},{"reflux":191,"superagent":195,"superagent-jsonp":194}],218:[function(require,module,exports){
 var React = require('react');
 
 var WeatherStore = require('./weather-store');
@@ -26473,4 +26495,39 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./partials/configuration-form":214,"./partials/icon":215,"./weather-store":216,"react":173}]},{},[1]);
+},{"./partials/configuration-form":215,"./partials/icon":216,"./weather-store":217,"react":173}],219:[function(require,module,exports){
+var Reflux = require('reflux');
+var ReactFire = require('reactfire');
+var Firebase = require('firebase');
+var ref = new Firebase("https://acedzndashboard.firebaseio.com");
+
+module.exports = Reflux.createStore({
+  login: function(){
+    ref.authWithOAuthPopup("google", function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+      } else {
+        console.log("Authenticated success:", authData);
+        this.user = {
+          id: authData.google.id,
+          displayName: authData.google.displayName,
+          gender: authData.google.cachedUserProfile.gender,
+          given_name: authData.google.cachedUserProfile.given_name,
+          link: authData.google.cachedUserProfile.link,
+          locale: authData.google.cachedUserProfile.locale,
+          name: authData.google.cachedUserProfile.name,
+          picture: authData.google.cachedUserProfile.picture,
+        }
+        this.sendUsertoServer();
+
+      }
+    });
+  },
+  sendUsertoServer: function(){
+    console.log(this.user,"this.user");
+  }
+
+});
+
+
+},{"firebase":30,"reactfire":174,"reflux":191}]},{},[1]);

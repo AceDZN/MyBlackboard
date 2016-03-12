@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var WeatherWidget = require('./components/weather/weather-widget');
 var ClockWidget = require('./components/clock/clock-widget');
 var ToDoWidget = require('./components/todo/todo-widget');
+var GoogleLogin = require('./components/social-login/google');
 var AceLogo = require('./components/ace-logo');
 
 var App = React.createClass({
@@ -31,6 +32,7 @@ var App = React.createClass({
             </div>
             <div className="row">
               <div className="col-xs-12 col-sm-6 col-md-6">
+                <GoogleLogin />
               </div>
               <div className="col-xs-12 col-sm-6 col-md-6">
                 <ToDoWidget />

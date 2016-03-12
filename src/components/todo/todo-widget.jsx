@@ -39,7 +39,7 @@ module.exports = React.createClass({
         <Header itemsStore={this.firebaseRefs.items} />
         <hr />
         <div className={"content " + (this.state.loaded ? 'loaded' : '')}>
-          <List  items={this.state.items} />
+          <List items={this.state.items} />
           {this.deleteButton()}
         </div>
       </div>

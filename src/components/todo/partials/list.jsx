@@ -3,7 +3,7 @@ var ListItem = require('./list-item');
 
 module.exports = React.createClass({
   render: function(){
-    return <div>
+    return <div className="list frame">
       {this.renderList()}
     </div>
   },
