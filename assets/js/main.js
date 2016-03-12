@@ -2,6 +2,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var WeatherWidget = require('./components/weather/weather-widget');
+var ClockWidget = require('./components/clock/clock-widget');
 var AceLogo = require('./components/ace-logo');
 
 var App = React.createClass({displayName: "App",
@@ -17,7 +18,10 @@ var App = React.createClass({displayName: "App",
           React.createElement("div", {className: "blackboard_bg"}, 
 
             React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-9"}, 
+              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-3"}, 
+                React.createElement(ClockWidget, {offset: "2"})
+              ), 
+              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}, 
                 React.createElement("h1", {className: "page-title"}, 
                   "My Blackboard"
                 )
@@ -38,7 +42,7 @@ var element = React.createElement(App, {});
 ReactDOM.render(element, document.querySelector('.main_wrap'));
 
 
-},{"./components/ace-logo":205,"./components/weather/weather-widget":209,"react":172,"react-dom":31}],2:[function(require,module,exports){
+},{"./components/ace-logo":205,"./components/clock/clock-widget":206,"./components/weather/weather-widget":210,"react":172,"react-dom":31}],2:[function(require,module,exports){
 'use strict';
 
 //
@@ -25083,6 +25087,69 @@ module.exports = React.createClass({displayName: "exports",
 },{"react":172}],206:[function(require,module,exports){
 var React = require('react');
 
+module.exports = React.createClass({displayName: "exports",
+  getInitialState: function(){
+    return {
+      offset:this.props.offset || '0',
+      hours: '',
+      minutes:'',
+      seconds:''
+    }
+
+  },
+  componentWillMount: function(){
+      this.startTime();
+    },
+    componentDidMount: function(){
+       window.setInterval(function () {
+        this.startTime();
+      }.bind(this), 1000);
+    },
+
+  render: function(){
+    return(
+    React.createElement("div", {className: "clock_wrapper"}, 
+      this.state.hours, ":", this.state.minutes, ":", this.state.seconds
+    )
+    )
+  },
+
+  startTime: function() {
+    var currentdate = new Date();
+    var hours = currentdate.getUTCHours()
+    if (this.state.offset){
+      hours += parseInt(this.state.offset);
+    }
+
+      // correct for number over 24, and negatives
+      if( hours >= 24 ){ hours -= 24; }
+      if( hours < 0   ){ hours += 12; }
+      // add leading zero, first convert hours to string
+      hours = hours + "";
+      if( hours.length == 1 ){ hours = "0" + hours; }
+
+      // minutes are the same on every time zone
+      var minutes = currentdate.getUTCMinutes();
+
+      // add leading zero, first convert hours to string
+      minutes = minutes + "";
+      if( minutes.length == 1 ){ minutes = "0" + minutes; }
+
+      seconds = currentdate.getUTCSeconds();
+
+      this.setState({
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+      });
+  },
+
+});
+
+
+},{"react":172}],207:[function(require,module,exports){
+var React = require('react');
+
 var WeatherStore = require('../weather-store');
 
 module.exports = React.createClass({displayName: "exports",
@@ -25105,13 +25172,14 @@ module.exports = React.createClass({displayName: "exports",
   },
   render: function(){
     return (
-        React.createElement("form", {className: "location_form "+ this.props.className, onSubmit: this.getLocationWeather}, 
+        React.createElement("form", {autocomplete: "off", className: "location_form "+ this.props.className, onSubmit: this.getLocationWeather}, 
           React.createElement("h5", {className: "text-center"}, "Please select a location"), 
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-12"}, 
               React.createElement("div", {className: "inputs"}, 
                 React.createElement("svg", {className: "location_mark", xmlns: "http://www.w3.org/2000/svg", version: "1.1", id: "Capa_1", x: "0px", y: "0px", width: "25px", height: "25px", viewBox: "0 0 466.583 466.582"}, React.createElement("g", null, React.createElement("path", {d: "M233.292,0c-85.1,0-154.334,69.234-154.334,154.333c0,34.275,21.887,90.155,66.908,170.834   c31.846,57.063,63.168,104.643,64.484,106.64l22.942,34.775l22.941-34.774c1.317-1.998,32.641-49.577,64.483-106.64   c45.023-80.68,66.908-136.559,66.908-170.834C387.625,69.234,318.391,0,233.292,0z M233.292,233.291c-44.182,0-80-35.817-80-80   s35.818-80,80-80c44.182,0,80,35.817,80,80S277.473,233.291,233.292,233.291z", fill: "#fff"}))), 
                 React.createElement("input", {
+                  autocomplete: "off", 
                   id: "location_add", 
                   value: this.state.inputLocation, 
                   type: "text", 
@@ -25149,6 +25217,7 @@ module.exports = React.createClass({displayName: "exports",
   },
   getMyWeather(){
     WeatherStore.getCurrentLocationWeather(this.handleLocation);
+
   },
   getLocationWeather(e){
     e.preventDefault();
@@ -25158,7 +25227,7 @@ module.exports = React.createClass({displayName: "exports",
       this.setState({
         inputLocation: res.body.name,
       });
-
+      this.toggleVisibility();
     this.props.handleLocation(res);
   }
 
@@ -25166,7 +25235,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"../weather-store":208,"react":172}],207:[function(require,module,exports){
+},{"../weather-store":209,"react":172}],208:[function(require,module,exports){
 var React = require('react');
 var ReactSVGMorph = require('react-svg-morph');
 var MorphReplace = ReactSVGMorph.MorphReplace;
@@ -25208,6 +25277,25 @@ module.exports = React.createClass({displayName: "exports",
                 React.createElement("path", {fill: "#FFFFFF", d: "M447.9199,1 C200.538673,1 0,201.602753 0,449.01602 C0,696.397247 200.538673,897 447.9199,897 C695.429287,897 896,696.365207 896,449.01602 C896,201.602753 695.429287,1 447.9199,1 L447.9199,1 Z M640.544681,570.31965 L569.191489,641.576721 C569.191489,641.576721 456.314393,520.465332 447.88786,520.465332 C439.589487,520.465332 326.68035,641.576721 326.68035,641.576721 L255.295119,570.31965 C255.295119,570.31965 376.534668,459.076596 376.534668,449.17622 C376.534668,439.115645 255.295119,327.840551 255.295119,327.840551 L326.68035,256.423279 C326.68035,256.423279 440.518648,377.598748 447.88786,377.598748 C455.321151,377.598748 569.191489,256.423279 569.191489,256.423279 L640.544681,327.840551 C640.544681,327.840551 519.273091,440.717647 519.273091,449.17622 C519.273091,457.218273 640.544681,570.31965 640.544681,570.31965 L640.544681,570.31965 Z", id: "Shape"})
               )
             )
+          )
+        );
+        break;
+      case "humidity":
+        return(
+          React.createElement("svg", {xmlns: "http://www.w3.org/2000/svg", version: "1.1", id: "Capa_1", x: "0px", y: "0px", width: "512px", height: "512px", viewBox: "0 0 383.344 383.345"}, 
+          React.createElement("g", null, 
+          	React.createElement("path", {d: "M273.217,106.899c-27.181-44.864-57.413-83.693-73.016-102.846c-2.088-2.565-5.221-4.054-8.528-4.053   c-3.308,0-6.44,1.489-8.529,4.054c-15.602,19.159-45.834,58.001-73.015,102.869c-35.028,57.823-52.789,105.63-52.789,142.09   c0,74.071,60.261,134.332,134.332,134.332s134.332-60.261,134.332-134.332C326.005,212.529,308.246,164.715,273.217,106.899z    M210.106,333.868c-7.844,2.006-15.986,3.022-24.205,3.022c-50.186,0-91.015-37.929-91.015-84.55   c0-11.255,2.97-24.405,8.825-39.083c0.989-2.48,3.807-3.895,6.585-3.295c2.776,0.598,4.64,3.018,4.354,5.65   c-0.342,3.148-0.516,6.223-0.516,9.136c0,50.735,40.881,93.221,95.093,98.821c2.698,0.279,4.803,2.297,5.018,4.812   C214.461,330.896,212.723,333.198,210.106,333.868z", fill: "#6195d4"})
+          )
+          )
+        );
+        break;
+      case "wind":
+        return(
+          React.createElement("svg", {xmlns: "http://www.w3.org/2000/svg", version: "1.1", id: "Capa_1", x: "0px", y: "0px", width: "512px", height: "512px", viewBox: "0 0 612 612"}, 
+          
+          	React.createElement("g", {id: "Wind"}, 
+          		React.createElement("path", {d: "M372.938,344.25H28.688C12.833,344.25,0,357.102,0,372.938s12.833,28.688,28.688,28.688h344.25 c26.354,0,47.812,21.439,47.812,47.812s-21.458,47.812-47.812,47.812s-47.812-21.439-47.812-47.812 c0-15.836-12.833-28.688-28.688-28.688s-28.688,12.852-28.688,28.688c0,57.987,47.182,105.188,105.188,105.188 s105.188-47.2,105.188-105.188S430.943,344.25,372.938,344.25z M487.688,57.375c-68.544,0-124.312,55.769-124.312,124.312 c0,15.835,12.833,28.688,28.688,28.688s28.688-12.852,28.688-28.688c0-36.911,30.026-66.938,66.938-66.938 s66.938,30.026,66.938,66.938s-30.026,66.938-66.938,66.938H86.062c-15.854,0-28.688,12.852-28.688,28.688S70.208,306,86.062,306     h401.625C556.231,306,612,250.231,612,181.688S556.231,57.375,487.688,57.375z", fill: "#dbdbdb"})
+          	)
           )
         );
         break;
@@ -25443,7 +25531,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"react":172,"react-svg-morph":37}],208:[function(require,module,exports){
+},{"react":172,"react-svg-morph":37}],209:[function(require,module,exports){
 var Reflux = require('reflux');
 var superagent = require('superagent');
 var jsonp = require('superagent-jsonp');
@@ -25459,7 +25547,7 @@ module.exports = Reflux.createStore({
     superagent.get(uri).use(jsonp).end(function(err, res){
       this.weather = res.body;
       callback(res);
-      console.log(res);
+      
     }.bind(this));
   },
   getLocationWeather: function(q,callback){
@@ -25484,7 +25572,7 @@ module.exports = Reflux.createStore({
 });
 
 
-},{"reflux":189,"superagent":193,"superagent-jsonp":192}],209:[function(require,module,exports){
+},{"reflux":189,"superagent":193,"superagent-jsonp":192}],210:[function(require,module,exports){
 var React = require('react');
 
 var WeatherStore = require('./weather-store');
@@ -25502,7 +25590,8 @@ module.exports = React.createClass({displayName: "exports",
       weather:[],
       main:[],
       config_visibility: "hide",
-      config_icon: "config"
+      config_icon: "config",
+      weather_visibility: "animated fadeIn"
     }
   },
   handleInputChange: function(e){
@@ -25512,9 +25601,9 @@ module.exports = React.createClass({displayName: "exports",
   },
   handleConfigDisplay: function(){
     if(this.state.config_visibility == "animated fadeOut" || this.state.config_visibility == "hide"){
-      this.setState({config_visibility: "animated fadeIn",config_icon: "close"});
+      this.setState({config_visibility: "animated fadeIn",config_icon: "close",weather_visibility: "animated fadeOut"});
     } else {
-      this.setState({config_visibility: "animated fadeOut",config_icon: "config"});
+      this.setState({config_visibility: "animated fadeOut",config_icon: "config",weather_visibility: "animated fadeIn"});
     }
   },
   getConfigDisplay(){
@@ -25532,7 +25621,8 @@ module.exports = React.createClass({displayName: "exports",
           lon: res.coord.lon,
           lat: res.coord.lat,
           weather: res.weather[0],
-          main: res.main
+          main: res.main,
+          wind: res.wind,
       });
     } else {
       console.log("OOPS - Error ");
@@ -25550,10 +25640,10 @@ module.exports = React.createClass({displayName: "exports",
       )
     )
   },
-  getMyWeather(){
+  getMyWeather: function(){
     WeatherStore.getCurrentLocationWeather(this.handleLocation);
   },
-  getLocationWeather(e){
+  getLocationWeather: function(e){
     e.preventDefault();
     WeatherStore.getLocationWeather(this.state.inputLocation,this.handleLocation);
   },
@@ -25566,30 +25656,36 @@ module.exports = React.createClass({displayName: "exports",
       );
     } else {
       return (
-        React.createElement("div", {className: "weather_wrap row"}, 
-          React.createElement("div", {className: "col-xs-12"}, 
+        React.createElement("div", {className: "weather_wrap row "+ this.state.weather_visibility}, 
+          React.createElement("div", {className: "col-xs-12 widget"}, 
             React.createElement("div", {className: "row"}, 
               React.createElement("div", {className: "col-xs-12 text-center"}, 
-                React.createElement("h3", null, this.state.location), 
                 React.createElement(WeatherIcon, {icon: this.state.weather.icon}), React.createElement("br", null)
+              )
+            ), 
+            React.createElement("div", {className: "row"}, 
+              React.createElement("div", {className: "col-xs-4"}, 
+                React.createElement("h2", {className: "text-right"}, parseInt(this.state.main.temp), "°")
+              ), 
+              React.createElement("div", {className: "col-xs-8 text-left"}, 
+                this.state.weather.description, React.createElement("br", null), 
+                this.state.location
+              )
+            ), 
+            React.createElement("div", {className: "row last"}, 
+              React.createElement("div", {className: "col-xs-6 data_cube"}, 
 
-              )
-            ), 
-            React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col-xs-12 text-center"}, 
-                this.state.weather.description
-              )
-            ), 
-            React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col-xs-4"}, 
-                React.createElement("h5", {className: "text-center"}, parseInt(this.state.main.temp_min), "°")
+                React.createElement("div", {className: "text-center"}, 
+                  React.createElement(WeatherIcon, {icon: "wind", width: "15px", height: "15px"}), 
+                  parseInt(this.state.wind.speed), " m/s"
+                )
               ), 
-              React.createElement("div", {className: "col-xs-4"}, 
-                React.createElement("h3", {className: "text-center"}, parseInt(this.state.main.temp), "°")
-              ), 
-              React.createElement("div", {className: "col-xs-4"}, 
-                React.createElement("h5", {className: "text-center"}, parseInt(this.state.main.temp_max), "°")
+              React.createElement("div", {className: "col-xs-6 data_cube"}, 
+                React.createElement("div", {className: "text-center"}, 
+                  React.createElement(WeatherIcon, {icon: "humidity", width: "15px", height: "15px"}), 
+                  parseInt(this.state.main.humidity), "%")
               )
+
             )
           )
         )
@@ -25600,4 +25696,4 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./partials/configuration-form":206,"./partials/icon":207,"./weather-store":208,"react":172}]},{},[1]);
+},{"./partials/configuration-form":207,"./partials/icon":208,"./weather-store":209,"react":172}]},{},[1]);

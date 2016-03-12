@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var WeatherWidget = require('./components/weather/weather-widget');
+var ClockWidget = require('./components/clock/clock-widget');
 var AceLogo = require('./components/ace-logo');
 
 var App = React.createClass({
@@ -16,7 +17,10 @@ var App = React.createClass({
           <div className="blackboard_bg">
 
             <div className="row">
-              <div className="col-xs-12 col-sm-6 col-md-9">
+              <div className="col-xs-12 col-sm-6 col-md-3">
+                <ClockWidget offset="2" />
+              </div>
+              <div className="col-xs-12 col-sm-6 col-md-6">
                 <h1 className="page-title">
                   My Blackboard
                 </h1>

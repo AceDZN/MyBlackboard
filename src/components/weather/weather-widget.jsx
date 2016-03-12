@@ -15,7 +15,8 @@ module.exports = React.createClass({
       weather:[],
       main:[],
       config_visibility: "hide",
-      config_icon: "config"
+      config_icon: "config",
+      weather_visibility: "animated fadeIn"
     }
   },
   handleInputChange: function(e){
@@ -25,9 +26,9 @@ module.exports = React.createClass({
   },
   handleConfigDisplay: function(){
     if(this.state.config_visibility == "animated fadeOut" || this.state.config_visibility == "hide"){
-      this.setState({config_visibility: "animated fadeIn",config_icon: "close"});
+      this.setState({config_visibility: "animated fadeIn",config_icon: "close",weather_visibility: "animated fadeOut"});
     } else {
-      this.setState({config_visibility: "animated fadeOut",config_icon: "config"});
+      this.setState({config_visibility: "animated fadeOut",config_icon: "config",weather_visibility: "animated fadeIn"});
     }
   },
   getConfigDisplay(){
@@ -45,7 +46,8 @@ module.exports = React.createClass({
           lon: res.coord.lon,
           lat: res.coord.lat,
           weather: res.weather[0],
-          main: res.main
+          main: res.main,
+          wind: res.wind,
       });
     } else {
       console.log("OOPS - Error ");
@@ -63,10 +65,10 @@ module.exports = React.createClass({
       </div>
     )
   },
-  getMyWeather(){
+  getMyWeather: function(){
     WeatherStore.getCurrentLocationWeather(this.handleLocation);
   },
-  getLocationWeather(e){
+  getLocationWeather: function(e){
     e.preventDefault();
     WeatherStore.getLocationWeather(this.state.inputLocation,this.handleLocation);
   },
@@ -79,30 +81,36 @@ module.exports = React.createClass({
       );
     } else {
       return (
-        <div className="weather_wrap row">
-          <div className="col-xs-12">
+        <div className={"weather_wrap row "+ this.state.weather_visibility}>
+          <div className="col-xs-12 widget">
             <div className="row">
               <div className="col-xs-12 text-center">
-                <h3>{this.state.location}</h3>
                 <WeatherIcon icon={this.state.weather.icon} /><br />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-4">
+                <h2 className="text-right">{parseInt(this.state.main.temp)}°</h2>
+              </div>
+              <div className="col-xs-8 text-left">
+                {this.state.weather.description}<br />
+                {this.state.location}
+              </div>
+            </div>
+            <div className="row last">
+              <div className="col-xs-6 data_cube">
 
+                <div className="text-center">
+                  <WeatherIcon icon="wind" width="15px" height="15px" />
+                  {parseInt(this.state.wind.speed)} m/s
+                </div>
               </div>
-            </div>
-            <div className="row">
-              <div className="col-xs-12 text-center">
-                {this.state.weather.description}
+              <div className="col-xs-6 data_cube">
+                <div className="text-center">
+                  <WeatherIcon icon="humidity" width="15px" height="15px" />
+                  {parseInt(this.state.main.humidity)}%</div>
               </div>
-            </div>
-            <div className="row">
-              <div className="col-xs-4">
-                <h5 className="text-center">{parseInt(this.state.main.temp_min)}°</h5>
-              </div>
-              <div className="col-xs-4">
-                <h3 className="text-center">{parseInt(this.state.main.temp)}°</h3>
-              </div>
-              <div className="col-xs-4">
-                <h5 className="text-center">{parseInt(this.state.main.temp_max)}°</h5>
-              </div>
+
             </div>
           </div>
         </div>

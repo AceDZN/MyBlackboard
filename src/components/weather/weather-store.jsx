@@ -13,7 +13,7 @@ module.exports = Reflux.createStore({
     superagent.get(uri).use(jsonp).end(function(err, res){
       this.weather = res.body;
       callback(res);
-      console.log(res);
+      
     }.bind(this));
   },
   getLocationWeather: function(q,callback){

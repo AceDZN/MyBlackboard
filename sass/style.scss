@@ -103,8 +103,8 @@ html, body, .blackboard_wrap {
 .page-title {
   display: inline-block;
   width: auto;
-
-  transform: rotate(-5deg);
+  transform: rotate(2deg);
+  margin:0;
 }
 .weather_widget_wrap{
   position:relative;
@@ -124,17 +124,39 @@ html, body, .blackboard_wrap {
       transform: rotate(180deg);
     }
   }
+  h2{font-size:45px;}
+  .widget{
+    box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);-mox-box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);-webkit-box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);
+    border-radius: 0 0 20% 20%;
+  }
+  .row.last{
+
+    line-height: 50px;
+  }
+  .data_cube{
+    svg{
+      margin-right: 10px;
+    }
+  }
 }
+
+.clock_wrapper{
+  font-size: 35px;
+  transform: rotate(-4deg);
+}
+
 .location_form{
-  @extend .animate;
+  @extend .animate.fast;
   opacity:0;
   position: absolute;
   top: 0px;
   left: 0px;
   width: 100%;
-  background: rgba(4, 35, 4, 0.9) none repeat scroll 0% 0%;
   height: 100%;
   padding: 40px 0;
+  &.fadeOut{
+    z-index:-10;
+  }
   .close-btn{
     display:inline-block;
     margin:20px auto;
