@@ -8,6 +8,8 @@
   "license": "ISC",
   "dependencies": {
     "browserify": "^9.0.3",
+    "reactfire": "^0.4.0",
+    "reactify": "^1.1.0",
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.2",
     "gulp-cssnano": "^2.1.1",

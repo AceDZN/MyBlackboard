@@ -23,6 +23,10 @@
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out; }
 
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px; }
+
 h1, h2, h3, h4, h5, h6 {
   width: 100%;
   display: block;
@@ -101,7 +105,10 @@ html, body, .blackboard_wrap {
 
 .weather_widget_wrap {
   position: relative; }
+  .weather_widget_wrap:hover .settings-btn {
+    opacity: 1; }
   .weather_widget_wrap .settings-btn {
+    opacity: 0;
     position: absolute;
     top: 0;
     right: 0;
@@ -130,6 +137,14 @@ html, body, .blackboard_wrap {
   font-size: 35px;
   transform: rotate(-4deg); }
 
+input[type="text"], .location_form input, .todo_wrapper input[type="text"]:disabled, .todo_wrapper .location_form input:disabled, .location_form .todo_wrapper input:disabled {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 40px;
+  height: 40px; }
+
 .location_form {
   opacity: 0;
   position: absolute;
@@ -140,23 +155,17 @@ html, body, .blackboard_wrap {
   padding: 40px 0; }
   .location_form.fadeOut {
     z-index: -10; }
+  .location_form input {
+    box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
+    -moz-box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
+    -webkit-box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
+    text-indent: 20px;
+    margin-bottom: 20px; }
   .location_form .close-btn {
     display: inline-block;
     margin: 20px auto; }
   .location_form .inputs {
     position: relative; }
-  .location_form input {
-    background: transparent;
-    border: 1px solid #fff;
-    box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
-    -moz-box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
-    -webkit-box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
-    text-indent: 20px;
-    color: #fff;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    line-height: 40px;
-    height: 40px; }
   .location_form .btn-primary {
     color: #fff;
     font-size: 16px;
@@ -187,6 +196,32 @@ html, body, .blackboard_wrap {
   padding: 5px;
   height: 34px;
   vertical-align: middle; }
+
+.todo_wrapper hr {
+  border-color: #0D3C0D; }
+
+.todo_wrapper .input-group {
+  box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
+  -moz-box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
+  -webkit-box-shadow: 0 0 3px #fff,inset 0 0 3px #fff;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 10px; }
+  .todo_wrapper .input-group button.btn {
+    line-height: 26px; }
+
+.todo_wrapper input[type="text"]:disabled, .todo_wrapper .location_form input:disabled, .location_form .todo_wrapper input:disabled {
+  text-decoration: line-through; }
+
+.input-group-btn .icon-btn {
+  padding: 7px;
+  box-shadow: 0px 0px 3px #fff;
+  border: 0px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #042304; }
+  .input-group-btn .icon-btn:hover {
+    border-right: 1px solid #FFFFFF;
+    box-shadow: 0 0 3px #fff,inset 0px 0px 10px #000; }
 
 .ace-logo {
   text-align: center;

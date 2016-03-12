@@ -25,7 +25,10 @@
     transition: all 0.3s ease-in-out;
   }
 }
-
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 h1, h2, h3, h4, h5, h6 {
   width: 100%;
   display: block;
@@ -108,7 +111,11 @@ html, body, .blackboard_wrap {
 }
 .weather_widget_wrap{
   position:relative;
+  &:hover .settings-btn{
+    opacity:1;
+  }
   .settings-btn{
+    opacity:0;
     @extend .animate;
     position:absolute;
     top:0;
@@ -144,6 +151,16 @@ html, body, .blackboard_wrap {
   font-size: 35px;
   transform: rotate(-4deg);
 }
+input[type="text"]{
+  background:transparent;
+  border:1px solid #fff;
+  color:#fff;
+  text-transform: uppercase;
+  line-height: 40px;
+  height:40px;
+
+}
+
 
 .location_form{
   @extend .animate.fast;
@@ -157,6 +174,12 @@ html, body, .blackboard_wrap {
   &.fadeOut{
     z-index:-10;
   }
+  input{
+    @extend input[type="text"];
+    box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -moz-box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -webkit-box-shadow:0 0 3px #fff,inset 0 0 3px #fff;
+    text-indent:20px;
+    margin-bottom:20px;
+  }
   .close-btn{
     display:inline-block;
     margin:20px auto;
@@ -165,17 +188,7 @@ html, body, .blackboard_wrap {
     position:relative;
 
   }
-  input{
-    background:transparent;
-    border:1px solid #fff;
-    box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -moz-box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -webkit-box-shadow:0 0 3px #fff,inset 0 0 3px #fff;
-    text-indent:20px;
-    color:#fff;
-    text-transform: uppercase;
-    margin-bottom:20px;
-    line-height: 40px;
-    height:40px;
-  }
+
   .btn-primary{
     color: #fff;
     font-size: 16px;
@@ -183,7 +196,7 @@ html, body, .blackboard_wrap {
     border-color: #2e6da4;
     text-transform: uppercase;
     line-height: 40px;
-        padding: 0 0 0 35px;
+    padding: 0 0 0 35px;
     background:transparent;
     border:1px solid #fff;
     box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -moz-box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -webkit-box-shadow:0 0 3px #fff,inset 0 0 3px #fff;
@@ -210,6 +223,41 @@ html, body, .blackboard_wrap {
   vertical-align: middle;
 }
 
+
+.todo_wrapper{
+  hr{
+    border-color: #0D3C0D;
+  }
+  .input-group{
+    box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -moz-box-shadow:0 0 3px #fff,inset 0 0 3px #fff; -webkit-box-shadow:0 0 3px #fff,inset 0 0 3px #fff;
+    border-radius:5px;
+    overflow:hidden;
+    margin-bottom: 10px;
+    button.btn{
+      line-height: 26px;
+    }
+  }
+}
+.todo_wrapper input[type="text"]{
+  &:disabled{
+    @extend input[type="text"];
+    text-decoration: line-through;
+  }
+}
+
+.input-group-btn{
+  .icon-btn{
+    padding: 7px;
+    box-shadow: 0px 0px 3px #fff;
+    border: 0px solid #fff;
+    border-bottom: 1px solid #fff;
+    border-right: 1px solid #042304;
+    &:hover{
+      border-right: 1px solid #FFFFFF;
+      box-shadow: 0 0 3px #fff,inset 0px 0px 10px #000;
+    }
+  }
+}
 .ace-logo{
   text-align:center;
   padding: 10px;
