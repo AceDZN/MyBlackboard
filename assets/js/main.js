@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 var WeatherWidget = require('./components/weather/weather-widget');
 var ClockWidget = require('./components/clock/clock-widget');
 var ToDoWidget = require('./components/todo/todo-widget');
-var GoogleLogin = require('./components/social-login/google');
+var ProfileWidget = require('./components/profile/profile-widget');
 var AceLogo = require('./components/ace-logo');
 
 var App = React.createClass({displayName: "App",
@@ -19,21 +19,30 @@ var App = React.createClass({displayName: "App",
         React.createElement("div", {className: "blackboard_wrap"}, 
           React.createElement("div", {className: "blackboard_bg"}, 
             React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-3"}, 
-                React.createElement(ClockWidget, {offset: "2"})
-              ), 
-              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}, 
-                React.createElement("h1", {className: "page-title"}, 
-                  "My Blackboard"
+              React.createElement("div", {className: "col-xs-12 col-sm-8 col-md-9"}, 
+                React.createElement("div", {className: "row"}, 
+                  React.createElement("div", {className: "col-xs-4 col-sm-3"}, 
+                    React.createElement(ClockWidget, {offset: "2"})
+                  ), 
+                  React.createElement("div", {className: "col-xs-8 col-sm-9"}, 
+                    React.createElement("h1", {className: "page-title"}, 
+                      "My Blackboard"
+                    )
+                  )
+                ), 
+                React.createElement("div", {className: "row"}, 
+                  React.createElement("div", {className: "col-xs-12"}, 
+                    React.createElement(ProfileWidget, null)
+                  )
                 )
               ), 
-              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-3"}, 
+              React.createElement("div", {className: "col-xs-12 col-sm-4 col-md-3"}, 
                 React.createElement(WeatherWidget, null)
               )
             ), 
             React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}, 
-                React.createElement(GoogleLogin, null)
+              React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}
+
               ), 
               React.createElement("div", {className: "col-xs-12 col-sm-6 col-md-6"}, 
                 React.createElement(ToDoWidget, null)
@@ -51,7 +60,7 @@ var element = React.createElement(App, {});
 ReactDOM.render(element, document.querySelector('.main_wrap'));
 
 
-},{"./components/ace-logo":207,"./components/clock/clock-widget":208,"./components/social-login/google":209,"./components/todo/todo-widget":214,"./components/weather/weather-widget":218,"react":173,"react-dom":32}],2:[function(require,module,exports){
+},{"./components/ace-logo":207,"./components/clock/clock-widget":208,"./components/profile/profile-widget":210,"./components/todo/todo-widget":215,"./components/weather/weather-widget":219,"react":173,"react-dom":32}],2:[function(require,module,exports){
 'use strict';
 
 //
@@ -25605,17 +25614,96 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":173}],209:[function(require,module,exports){
 var React = require('react');
-var UserStore = require('../../stores/user-store');
+var UserStore = require('../../../stores/user-store');
 
 
 module.exports = React.createClass({displayName: "exports",
   render: function(){
     return (
-      React.createElement("div", null, 
-        React.createElement("h1", {onClick: UserStore.login}, "Login with Google")
+      React.createElement("h1", {onClick: this.handleLogin}, 
+      "Login with Google"
+      )
+    );
+  },
+  handleLogin: function(){
+    UserStore.googleLogin();
+    this.handleSuccess();
+
+  },
+  handleSuccess: function(){
+    if (this.props.onLogin && this.props.onLogin !='' ){
+      this.props.onLogin();
+      console.log("this.ONLOGIN");
+    } else {
+      console.log("no callback");
+    }
+  }
+});
+
+
+},{"../../../stores/user-store":220,"react":173}],210:[function(require,module,exports){
+var React = require('react');
+var UserStore = require('../../stores/user-store');
+var GoogleLogin = require('./partials/google-login');
+
+module.exports = React.createClass({displayName: "exports",
+  mixins: [
+    "UserStore"
+  ],
+  getInitialState: function(){
+    return({
+      user: UserStore.getUser()
+    })
+  },
+  render: function(){
+    var user = UserStore.getUser();
+    return (
+      React.createElement("div", {className: "profile_wrapper"}, 
+        this.renderProfile()
       )
     )
   },
+  renderProfile: function(){
+    if(this.state.user && this.state.user != ''){
+      console.log(this.state.user, "this.state.user");
+      return this.renderUser();
+    } else {
+      console.log("NO User");
+      return this.LoginButtons();
+    }
+  },
+  renderUser: function(){
+    return (
+      React.createElement("div", {className: "row user_wrapper"}, 
+        React.createElement("div", {className: "col-xs-2"}, 
+          React.createElement("img", {className: "profile_pic", src: this.state.user.picture})
+        ), 
+        React.createElement("div", {className: "col-xs-10"}, 
+          React.createElement("h1", null, 
+          this.state.user.displayName
+          )
+        ), 
+        React.createElement("div", {className: "col-xs-10"}, 
+          React.createElement("h1", {onClick: UserStore.logout}, 
+          "logout"
+          )
+        )
+
+      )
+    );
+  },
+  LoginButtons: function(){
+    return (
+      React.createElement("div", null, 
+        React.createElement(GoogleLogin, {onLogin: this.handleLogin})
+      )
+    );
+  },
+  handleLogin: function(u){
+    this.setState({
+      user:u
+    });
+  }
 
 
 
@@ -25623,7 +25711,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"../../stores/user-store":219,"react":173}],210:[function(require,module,exports){
+},{"../../stores/user-store":220,"./partials/google-login":209,"react":173}],211:[function(require,module,exports){
 var React = require('react');
 module.exports = React.createClass({displayName: "exports",
   render: function(){
@@ -25663,7 +25751,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"react":173}],211:[function(require,module,exports){
+},{"react":173}],212:[function(require,module,exports){
 var React = require('react');
 var ReactSVGMorph = require('react-svg-morph');
 var MorphReplace = ReactSVGMorph.MorphReplace;
@@ -25751,7 +25839,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"react":173,"react-svg-morph":38}],212:[function(require,module,exports){
+},{"react":173,"react-svg-morph":38}],213:[function(require,module,exports){
 var React = require('react');
 var Firebase = require('firebase');
 var rootUrl = "https://blinding-torch-6580.firebaseio.com/";
@@ -25846,7 +25934,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./icon":211,"firebase":30,"react":173}],213:[function(require,module,exports){
+},{"./icon":212,"firebase":30,"react":173}],214:[function(require,module,exports){
 var React = require('react');
 var ListItem = require('./list-item');
 
@@ -25879,7 +25967,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./list-item":212,"react":173}],214:[function(require,module,exports){
+},{"./list-item":213,"react":173}],215:[function(require,module,exports){
 var React = require('react');
 var ReactFire = require('reactfire');
 var Firebase = require('firebase');
@@ -25946,7 +26034,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./partials/header":210,"./partials/list":213,"firebase":30,"react":173,"reactfire":174}],215:[function(require,module,exports){
+},{"./partials/header":211,"./partials/list":214,"firebase":30,"react":173,"reactfire":174}],216:[function(require,module,exports){
 var React = require('react');
 
 var WeatherStore = require('../weather-store');
@@ -26034,7 +26122,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"../weather-store":217,"react":173}],216:[function(require,module,exports){
+},{"../weather-store":218,"react":173}],217:[function(require,module,exports){
 var React = require('react');
 var ReactSVGMorph = require('react-svg-morph');
 var MorphReplace = ReactSVGMorph.MorphReplace;
@@ -26330,7 +26418,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"react":173,"react-svg-morph":38}],217:[function(require,module,exports){
+},{"react":173,"react-svg-morph":38}],218:[function(require,module,exports){
 var Reflux = require('reflux');
 var superagent = require('superagent');
 var jsonp = require('superagent-jsonp');
@@ -26371,7 +26459,7 @@ module.exports = Reflux.createStore({
 });
 
 
-},{"reflux":191,"superagent":195,"superagent-jsonp":194}],218:[function(require,module,exports){
+},{"reflux":191,"superagent":195,"superagent-jsonp":194}],219:[function(require,module,exports){
 var React = require('react');
 
 var WeatherStore = require('./weather-store');
@@ -26495,14 +26583,23 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"./partials/configuration-form":215,"./partials/icon":216,"./weather-store":217,"react":173}],219:[function(require,module,exports){
+},{"./partials/configuration-form":216,"./partials/icon":217,"./weather-store":218,"react":173}],220:[function(require,module,exports){
 var Reflux = require('reflux');
 var ReactFire = require('reactfire');
 var Firebase = require('firebase');
 var ref = new Firebase("https://acedzndashboard.firebaseio.com");
 
 module.exports = Reflux.createStore({
-  login: function(){
+  authDataCallback: function(authData) {
+    if (authData) {
+      this.user = authData;
+      console.log("User " + authData.uid + " is logged in with " + authData.provider);
+    } else {
+      console.log("User is logged out");
+    }
+  },
+  googleLogin: function(e){
+    console.log(e);
     ref.authWithOAuthPopup("google", function(error, authData) {
       if (error) {
         console.log("Login Failed!", error);
@@ -26512,21 +26609,34 @@ module.exports = Reflux.createStore({
           id: authData.google.id,
           displayName: authData.google.displayName,
           gender: authData.google.cachedUserProfile.gender,
-          given_name: authData.google.cachedUserProfile.given_name,
+          last_name: authData.google.cachedUserProfile.given_name,
           link: authData.google.cachedUserProfile.link,
           locale: authData.google.cachedUserProfile.locale,
-          name: authData.google.cachedUserProfile.name,
+          first_name: authData.google.cachedUserProfile.name,
           picture: authData.google.cachedUserProfile.picture,
         }
+        console.log(this,"this");
         this.sendUsertoServer();
 
       }
-    });
+    }.bind(this));
   },
   sendUsertoServer: function(){
     console.log(this.user,"this.user");
-  }
 
+  },
+  getUser: function(){
+    if(this.user){
+      console.log("USER ALREADY CONNECTED",this.user);
+    } else {
+      ref.onAuth(this.authDataCallback)
+      console.log(this.user,"this.USER");
+    }
+    return this.user
+  },
+  logout: function(){
+    ref.unauth();
+  }
 });
 
 

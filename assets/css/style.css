@@ -29,12 +29,12 @@
   /* should match background, can't be transparent */
   background-color: rgba(0, 0, 0, 0.5); }
 
-.animate, .weather_widget_wrap .settings-btn {
+.animate, h1, h2, h3, h4, h5, h6, .blackboard_wrap, .weather_widget_wrap, .weather_widget_wrap .settings-btn, .clock_wrapper {
   -webkit-transition: all 1s ease-in-out;
   -moz-transition: all 1s ease-in-out;
   -o-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out; }
-  .animate.fast, .weather_widget_wrap .fast.settings-btn, .location_form {
+  .animate.fast, h1.fast, h2.fast, h3.fast, h4.fast, h5.fast, h6.fast, .fast.blackboard_wrap, .fast.weather_widget_wrap, .weather_widget_wrap .fast.settings-btn, .fast.clock_wrapper, .location_form {
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
@@ -97,12 +97,13 @@ html, body, .blackboard_wrap {
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  padding: 30px 30px 5px 30px;
-  margin: 20px;
+  padding: 10px 10px 5px;
+  margin: 20px auto;
   background-color: #6D4D0B;
   background-image: repeating-linear-gradient(10deg, transparent, transparent 65px, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.01) 70px);
   box-shadow: inset 1px 1px 2px 2px rgba(255, 255, 255, 0.45), inset -1px -1px 2px 2px black;
-  max-height: 100%; }
+  max-height: 100%;
+  max-width: 1200px; }
   .blackboard_wrap .blackboard_bg {
     border-radius: 3px;
     -moz-border-radius: 3px;
@@ -115,20 +116,23 @@ html, body, .blackboard_wrap {
     min-height: 550px; }
 
 .page-title {
-  display: inline-block;
-  width: auto;
+  display: block;
   transform: rotate(2deg);
-  margin: 0; }
+  margin: 0;
+  text-align: right; }
 
 .weather_widget_wrap {
-  position: relative; }
+  position: relative;
+  max-width: 450px;
+  margin: auto;
+  float: none; }
   .weather_widget_wrap:hover .settings-btn {
     opacity: 1; }
   .weather_widget_wrap .settings-btn {
     opacity: 0;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 20px;
+    right: 20px;
     width: 20px;
     height: 20px;
     color: #042304;
@@ -141,9 +145,9 @@ html, body, .blackboard_wrap {
   .weather_widget_wrap h2 {
     font-size: 45px; }
   .weather_widget_wrap .widget {
-    box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);
-    -mox-box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);
-    -webkit-box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);
+    box-shadow: 0px 4px 5px 0 rgba(218, 219, 213, 0.11);
+    -mox-box-shadow: 0px 4px 5px 0 rgba(218, 219, 213, 0.11);
+    -webkit-box-shadow: 0px 4px 5px 0 rgba(218, 219, 213, 0.11);
     border-radius: 0 0 20% 20%; }
   .weather_widget_wrap .row.last {
     line-height: 50px; }
@@ -151,7 +155,7 @@ html, body, .blackboard_wrap {
     margin-right: 10px; }
 
 .clock_wrapper {
-  font-size: 35px;
+  font-size: 14px;
   transform: rotate(-4deg); }
 
 input[type="text"], .location_form input, .todo_wrapper input[type="text"]:disabled, .todo_wrapper .location_form input:disabled, .location_form .todo_wrapper input:disabled {
@@ -251,6 +255,14 @@ input[type="text"], .location_form input, .todo_wrapper input[type="text"]:disab
     border-right: 1px solid #FFFFFF;
     box-shadow: 0 0 3px #fff,inset 0px 0px 10px #000; }
 
+.profile_wrapper {
+  margin: 10px 0; }
+
+.user_wrapper img.profile_pic {
+  border-radius: 50%;
+  width: 100%;
+  max-height: 100px; }
+
 .ace-logo {
   text-align: center;
   padding: 10px; }
@@ -261,3 +273,23 @@ input[type="text"], .location_form input, .todo_wrapper input[type="text"]:disab
     border-radius: 50%;
     padding: 5px;
     box-shadow: inset 0px 2px 2px 1px #422D02,inset 0px -1px 0px 0px #988E79; }
+
+/* Custom, iPhone Retina */
+/* Extra Small Devices, Phones */
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+  .blackboard_wrap {
+    padding: 30px 30px 5px; }
+  .clock_wrapper {
+    font-size: 35px; }
+  .page-title {
+    display: inline-block;
+    width: auto;
+    text-align: left; }
+  .weather_widget_wrap .widget {
+    box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);
+    -mox-box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11);
+    -webkit-box-shadow: -3px 4px 5px 0 rgba(218, 219, 213, 0.11); } }
+
+/* Medium Devices, Desktops */
+/* Large Devices, Wide Screens */

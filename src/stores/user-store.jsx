@@ -4,7 +4,16 @@ var Firebase = require('firebase');
 var ref = new Firebase("https://acedzndashboard.firebaseio.com");
 
 module.exports = Reflux.createStore({
-  login: function(){
+  authDataCallback: function(authData) {
+    if (authData) {
+      this.user = authData;
+      console.log("User " + authData.uid + " is logged in with " + authData.provider);
+    } else {
+      console.log("User is logged out");
+    }
+  },
+  googleLogin: function(e){
+    console.log(e);
     ref.authWithOAuthPopup("google", function(error, authData) {
       if (error) {
         console.log("Login Failed!", error);
@@ -14,19 +23,32 @@ module.exports = Reflux.createStore({
           id: authData.google.id,
           displayName: authData.google.displayName,
           gender: authData.google.cachedUserProfile.gender,
-          given_name: authData.google.cachedUserProfile.given_name,
+          last_name: authData.google.cachedUserProfile.given_name,
           link: authData.google.cachedUserProfile.link,
           locale: authData.google.cachedUserProfile.locale,
-          name: authData.google.cachedUserProfile.name,
+          first_name: authData.google.cachedUserProfile.name,
           picture: authData.google.cachedUserProfile.picture,
         }
+        console.log(this,"this");
         this.sendUsertoServer();
 
       }
-    });
+    }.bind(this));
   },
   sendUsertoServer: function(){
     console.log(this.user,"this.user");
-  }
 
+  },
+  getUser: function(){
+    if(this.user){
+      console.log("USER ALREADY CONNECTED",this.user);
+    } else {
+      ref.onAuth(this.authDataCallback)
+      console.log(this.user,"this.USER");
+    }
+    return this.user
+  },
+  logout: function(){
+    ref.unauth();
+  }
 });
