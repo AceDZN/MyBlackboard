@@ -1,9 +1,17 @@
 var Reflux = require('reflux');
+var Actions = require('./actions');
 var ReactFire = require('reactfire');
 var Firebase = require('firebase');
 var ref = new Firebase("https://acedzndashboard.firebaseio.com");
 
+
 module.exports = Reflux.createStore({
+  listenables: [
+    Actions
+  ],
+  onUpdateUserInfo: function(){
+    console.log("updateUserInfo on store");
+  },
   authDataCallback: function(authData) {
     if (authData) {
       this.user = authData;
@@ -12,7 +20,7 @@ module.exports = Reflux.createStore({
       console.log("User is logged out");
     }
   },
-  googleLogin: function(e){
+  onGoogleLogin: function(e){
     console.log(e);
     ref.authWithOAuthPopup("google", function(error, authData) {
       if (error) {

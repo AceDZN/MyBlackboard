@@ -1,8 +1,11 @@
 var React = require('react');
 var UserStore = require('../../../stores/user-store');
-
+var Actions = require('../../../stores/actions');
 
 module.exports = React.createClass({
+  init: function() {
+        this.listenToMany(Actions);
+    },
   render: function(){
     return (
       <h1 onClick={this.handleLogin}>
@@ -11,7 +14,7 @@ module.exports = React.createClass({
     );
   },
   handleLogin: function(){
-    UserStore.googleLogin();
+    Actions.googleLogin();
     this.handleSuccess();
 
   },

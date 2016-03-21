@@ -25615,9 +25615,12 @@ module.exports = React.createClass({displayName: "exports",
 },{"react":173}],209:[function(require,module,exports){
 var React = require('react');
 var UserStore = require('../../../stores/user-store');
-
+var Actions = require('../../../stores/actions');
 
 module.exports = React.createClass({displayName: "exports",
+  init: function() {
+        this.listenToMany(Actions);
+    },
   render: function(){
     return (
       React.createElement("h1", {onClick: this.handleLogin}, 
@@ -25626,7 +25629,7 @@ module.exports = React.createClass({displayName: "exports",
     );
   },
   handleLogin: function(){
-    UserStore.googleLogin();
+    Actions.googleLogin();
     this.handleSuccess();
 
   },
@@ -25641,7 +25644,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"../../../stores/user-store":220,"react":173}],210:[function(require,module,exports){
+},{"../../../stores/actions":220,"../../../stores/user-store":221,"react":173}],210:[function(require,module,exports){
 var React = require('react');
 var UserStore = require('../../stores/user-store');
 var GoogleLogin = require('./partials/google-login');
@@ -25711,7 +25714,7 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 
-},{"../../stores/user-store":220,"./partials/google-login":209,"react":173}],211:[function(require,module,exports){
+},{"../../stores/user-store":221,"./partials/google-login":209,"react":173}],211:[function(require,module,exports){
 var React = require('react');
 module.exports = React.createClass({displayName: "exports",
   render: function(){
@@ -26585,11 +26588,28 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"./partials/configuration-form":216,"./partials/icon":217,"./weather-store":218,"react":173}],220:[function(require,module,exports){
 var Reflux = require('reflux');
+
+module.exports = Reflux.createActions([
+    "updateUserInfo",
+    "googleLogin"
+]);
+
+
+},{"reflux":191}],221:[function(require,module,exports){
+var Reflux = require('reflux');
+var Actions = require('./actions');
 var ReactFire = require('reactfire');
 var Firebase = require('firebase');
 var ref = new Firebase("https://acedzndashboard.firebaseio.com");
 
+
 module.exports = Reflux.createStore({
+  listenables: [
+    Actions
+  ],
+  onUpdateUserInfo: function(){
+    console.log("updateUserInfo on store");
+  },
   authDataCallback: function(authData) {
     if (authData) {
       this.user = authData;
@@ -26598,7 +26618,7 @@ module.exports = Reflux.createStore({
       console.log("User is logged out");
     }
   },
-  googleLogin: function(e){
+  onGoogleLogin: function(e){
     console.log(e);
     ref.authWithOAuthPopup("google", function(error, authData) {
       if (error) {
@@ -26640,4 +26660,4 @@ module.exports = Reflux.createStore({
 });
 
 
-},{"firebase":30,"reactfire":174,"reflux":191}]},{},[1]);
+},{"./actions":220,"firebase":30,"reactfire":174,"reflux":191}]},{},[1]);
