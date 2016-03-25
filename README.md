@@ -10,3 +10,6 @@ Checkout this repo, install dependencies, then start the http-server process wit
 	> npm install
 	> gulp
 ```
+
+
+<img src="http://www.acedzn.com/assets/img/icons/android-icon-57x57.png">
